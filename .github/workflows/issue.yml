@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        
       - name: Check for Label
         id: check_label
         run: echo "Label is ${{ github.event.label.name }}"
