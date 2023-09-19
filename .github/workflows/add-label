@@ -1,0 +1,33 @@
+name: Respond to Label
+
+on:
+  workflow_dispatch:
+    inputs:
+      label_name:
+        description: 'Label name'
+        required: true
+
+jobs:
+  process_label:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Check for Label
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LABEL_NAME: ${{ github.event.inputs.label_name }}
+        run: |
+          issue_number="${{ github.event.issue.number }}"
+          label_name="${{ env.LABEL_NAME }}"
+
+          # Check if the specific label has been added to the issue
+          if curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                 "https://api.github.com/repos/${{ github.repository }}/issues/$issue_number/labels" | jq -e ".[] | select(.name == \"$label_name\")" > /dev/null; then
+            echo "The label '$label_name' has been added to the issue. Triggering further actions..."
+            # Add your further workflow steps here
+          else
+            echo "The label '$label_name' has not been added to the issue. No further action needed."
+          fi
