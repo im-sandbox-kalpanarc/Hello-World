@@ -1,0 +1,26 @@
+name: Add Label to Issue
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  add_label:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Add Label to Issue
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          issue_number="${{ github.event.issue.number }}"
+          label_name="provisioning-closed"
+
+          # Add the label to the issue using GitHub API
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+            -d "{\"labels\":[\"$label_name\"]}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/$issue_number/labels"
