@@ -4,7 +4,6 @@ name: Close issue and delete branch
 on:
  issues:
     types:
-        - labeled
         - provisioning-closed
 
 jobs:
