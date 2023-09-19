@@ -1,4 +1,4 @@
-name: Respond to Label
+name: Respond to new Label
 
 on:
   workflow_dispatch:
