@@ -2,9 +2,10 @@
 name: Close issue and delete branch
 
 on:
-    issues:
-        types:
-            - labeled
+ issues:
+    types:
+        - labeled
+        - edited
 
 jobs:
   process_issue:
@@ -17,7 +18,12 @@ jobs:
       - name: Check for Label
         id: check_label
         run: echo "Label is ${{ github.event.label.name }}"
-        
+
+      - name: Check Issue State
+        run: |
+          issue_state="${{ github.event.issue.state }}"
+          echo "Issue state is $issue_state"
+          
       - name: Conditional Step
         if: ${{ contains(github.event.label.name, 'provisioning-closed') }}
         run: |
