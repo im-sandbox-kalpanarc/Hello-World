@@ -1,0 +1,21 @@
+# Close the issue and delete the branch
+name: Close issue and delete branch
+
+on:
+    issues:
+        types:
+            - labeled
+
+jobs:
+  process_issue:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check for Label
+        id: check_label
+        run: echo "Label is ${{ github.event.label.name }}"
+        
+      - name: Conditional Step
+        if: ${{ contains(github.event.label.name, 'provisioning-closed') }}
+        run: |
+          # Your workflow steps here   
